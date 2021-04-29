@@ -20,6 +20,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Badge} from 'react-native-elements';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 function PcHome(props) {
@@ -73,18 +74,22 @@ function PcHome(props) {
               height: HEIGHT * 0.35,
               justifyContent: 'flex-start',
             }}>
-            <Ionicons
-              name="search"
-              color="white"
-              size={35}
-              style={{marginTop: HEIGHT * 0.01}}
-            />
-            <Ionicons
-              name="heart"
-              color="white"
-              size={35}
-              style={{marginTop: HEIGHT * 0.04}}
-            />
+            <TouchableOpacity onPress={PcGotoSearch}>
+              <Ionicons
+                name="search"
+                color="white"
+                size={35}
+                style={{marginTop: HEIGHT * 0.01}}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={PcGotoFav}>
+              <Ionicons
+                name="heart"
+                color="white"
+                size={35}
+                style={{marginTop: HEIGHT * 0.04}}
+              />
+            </TouchableOpacity>
           </View>
           <Loop
             style={{flex: 1, maxHeight: HEIGHT * 0.65}}
@@ -151,7 +156,12 @@ function PcHome(props) {
             style={{paddingBottom: HEIGHT * 0.02}}
             horizontal={false}
             data={PctabProducts}
-            renderItem={({item}) => <PcVerticalTile item={item} />}
+            renderItem={({item}) => (
+              <PcVerticalTile
+                item={item}
+                PcGoToSingleProduct={PcGoToSingleProduct}
+              />
+            )}
           />
           <View
             style={{
@@ -178,6 +188,15 @@ function PcHome(props) {
                 color="white"
                 size={(H_W.width / HEIGHT) * 90}
               />
+              {props.PctotalItems > 0 && (
+                <Badge
+                  value={props.PctotalItems}
+                  containerStyle={{position: 'absolute', top: 0, right: 0}}
+                  badgeStyle={{
+                    backgroundColor: 'red',
+                  }}
+                />
+              )}
             </View>
           </View>
         </View>
@@ -192,7 +211,8 @@ export const PcVerticalTile = ({item, PcGoToSingleProduct, PcCart}) => {
 
   return (
     <View style={{alignItems: 'center', marginTop: HEIGHT * 0.14}}>
-      <View
+      <TouchableOpacity
+        onPress={() => PcGoToSingleProduct(item)}
         style={{
           backgroundColor: 'white',
           width: H_W.width * 0.55,
@@ -280,7 +300,7 @@ export const PcVerticalTile = ({item, PcGoToSingleProduct, PcCart}) => {
             ${item.price}
           </Text>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -301,7 +321,7 @@ export const PcHorizontalTile = ({
 
   const getTheCategory = () => {
     for (let Pc = 0; Pc < Data.category.length; Pc++) {
-      if (Data.category[Pc].id === item.category) {
+      if (Data.category[Pc].id === item.categoryid) {
         setProductCategory(Data.category[Pc].category);
         break;
       }
@@ -326,7 +346,7 @@ export const PcHorizontalTile = ({
     <View
       style={{
         alignItems: 'center',
-        marginVertical: HEIGHT * 0.02,
+        paddingVertical: HEIGHT * 0.02,
       }}>
       <TouchableOpacity
         onPress={() => PcGoToSingleProduct(item)}
@@ -390,8 +410,9 @@ export const PcHorizontalTile = ({
               style={{
                 paddingHorizontal: H_W.width * 0.02,
                 paddingVertical: HEIGHT * 0.008,
-                backgroundColor: colors.secondary,
                 borderRadius: 8,
+                borderWidth: 1.5,
+                borderColor: colors.primary,
               }}>
               <FontAwesome
                 name={fav ? 'heart' : 'heart-o'}
@@ -410,15 +431,26 @@ export const PcHorizontalTile = ({
             </Text>
           </View>
         </View>
-        <FastImage
-          source={item.image}
-          style={{
-            width: H_W.width * 0.29,
-            height: H_W.width * 0.29,
-            marginLeft: H_W.width * 0.04,
-          }}
-          resizeMode="contain"
-        />
+        <View style={{overflow: 'hidden'}}>
+          <View
+            style={{
+              width: H_W.width * 0.22,
+              height: HEIGHT * 0.25,
+              backgroundColor: colors.primary,
+              position: 'absolute',
+              transform: [{rotate: '30deg'}],
+              marginTop: -HEIGHT * 0.03,
+            }}
+          />
+          <FastImage
+            source={item.image}
+            style={{
+              width: H_W.width * 0.29,
+              height: H_W.width * 0.29,
+            }}
+            resizeMode="contain"
+          />
+        </View>
       </TouchableOpacity>
     </View>
   );

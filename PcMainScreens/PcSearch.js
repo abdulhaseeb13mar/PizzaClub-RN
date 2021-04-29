@@ -16,7 +16,7 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import PcHeader from '../PcFrequentUsage/PcHeader';
 import Fontisto from 'react-native-vector-icons/Fontisto';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {PcHorizontalTile} from './PcHome';
 
 function Search(props) {
@@ -64,10 +64,12 @@ function Search(props) {
 
   const PcchangeSearchText = (t) => setSearchText(t);
   return (
-    <WrapperScreen style={{backgroundColor: 'white'}}>
+    <WrapperScreen
+      statusColor={`rgba(${colors.rgb_Primary}, 0.15)`}
+      style={{backgroundColor: `rgba(${colors.rgb_Primary}, 0.15)`}}>
       <PcHeader
-        leftIcon={SimpleLineIcons}
-        leftIconName="arrow-left"
+        leftIcon={Ionicons}
+        leftIconName="arrow-back"
         leftIconColor={colors.primary}
         leftIconAction={PcGoBack}
         Title={<Text style={styles.PcSearch2}>Search</Text>}
