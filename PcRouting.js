@@ -6,7 +6,7 @@ import {
 import {NavigationContainer} from '@react-navigation/native';
 import Navigator from './PcFrequentUsage/PcRefNavigation';
 import PcHome from './PcMainScreens/PcHome';
-// import PcSP from './PcMainScreens/PcSP';
+import PcSP from './PcMainScreens/PcSP';
 // import PcCart from './PcMainScreens/PcCart';
 // import PcFav from './PcMainScreens/PcFav';
 // import PcContact from './PcMainScreens/PcContact';
@@ -21,13 +21,13 @@ function Routes(props) {
         Navigator.InitializeRefNavigation(ref);
       }}>
       <Stack.Navigator
-        initialRouteName="PcHome"
+        initialRouteName="PcSP"
         screenOptions={{
           headerShown: false,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}>
         <Stack.Screen name="PcHome" component={PcHome} />
-        {/* <Stack.Screen name="PcSP" component={PcSP} /> */}
+        <Stack.Screen name="PcSP" component={PcSP} />
         {/* <Stack.Screen name="PcFav" component={PcFav} /> */}
         {/* <Stack.Screen name="PcCart" component={PcCart} /> */}
         {/* <Stack.Screen name="PcContact" component={PcContact} /> */}

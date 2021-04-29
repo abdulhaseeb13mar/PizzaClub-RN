@@ -14,11 +14,13 @@ import {
   PcremoveFavAction,
   PcsetFavAction,
 } from '../PcStateManagement/PcActions';
-import Fontisto from 'react-native-vector-icons/Fontisto';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import FastImage from 'react-native-fast-image';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import PcHeader from '../PcFrequentUsage/PcHeader';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 function PcHome(props) {
   useEffect(() => {
@@ -33,7 +35,7 @@ function PcHome(props) {
   const PcchangeTab = (tab) => {
     setPcCurrentCat(tab);
     const filteredProducts = Data.product.filter(
-      (item) => item.category === tab.id,
+      (item) => item.categoryid === tab.id,
     );
     setPcTabProducts(filteredProducts);
   };
@@ -45,7 +47,143 @@ function PcHome(props) {
     RefNavigation.Navigate('PcSP');
   };
 
-  return <WrapperScreen style={{backgroundColor: 'white'}}></WrapperScreen>;
+  return (
+    <WrapperScreen
+      statusColor={colors.primary}
+      style={{backgroundColor: `rgba(${colors.rgb_Primary}, 0.15)`}}>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          alignItems: 'stretch',
+        }}>
+        <View
+          style={{
+            marginTop: -insets.top,
+            paddingTop: insets.top,
+            marginBottom: -insets.bottom,
+            paddingBottom: insets.bottom,
+            width: H_W.width * 0.2,
+            backgroundColor: colors.primary,
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              height: HEIGHT * 0.35,
+              justifyContent: 'flex-start',
+            }}>
+            <Ionicons
+              name="search"
+              color="white"
+              size={35}
+              style={{marginTop: HEIGHT * 0.01}}
+            />
+            <Ionicons
+              name="heart"
+              color="white"
+              size={35}
+              style={{marginTop: HEIGHT * 0.04}}
+            />
+          </View>
+          <Loop
+            style={{flex: 1, maxHeight: HEIGHT * 0.65}}
+            horizontal={false}
+            data={Pccategories}
+            renderItem={({item}) => (
+              <TabList item={item} PcchangeTab={PcchangeTab} />
+            )}
+          />
+        </View>
+        <View style={{flex: 1}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              backgroundColor: colors.primary,
+              paddingVertical: HEIGHT * 0.015,
+              paddingHorizontal: H_W.width * 0.025,
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 3,
+              },
+              shadowOpacity: 0.29,
+              shadowRadius: 4.65,
+            }}>
+            <Text
+              style={{
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: (H_W.width / HEIGHT) * 80,
+                marginRight: H_W.width * 0.03,
+              }}>
+              {PccurrentCat.category}
+            </Text>
+            {PccurrentCat.id === '1' ? (
+              <FontAwesome5
+                name="hamburger"
+                color="white"
+                size={(H_W.width / HEIGHT) * 80}
+              />
+            ) : PccurrentCat.id === '2' ? (
+              <MaterialCommunityIcons
+                name="pasta"
+                color="white"
+                size={(H_W.width / HEIGHT) * 90}
+              />
+            ) : PccurrentCat.id === '3' ? (
+              <FontAwesome5
+                name="pizza-slice"
+                color="white"
+                size={(H_W.width / HEIGHT) * 90}
+              />
+            ) : (
+              <Entypo
+                name="drink"
+                color="white"
+                size={(H_W.width / HEIGHT) * 90}
+              />
+            )}
+          </View>
+          <Loop
+            style={{paddingBottom: HEIGHT * 0.02}}
+            horizontal={false}
+            data={PctabProducts}
+            renderItem={({item}) => <PcVerticalTile item={item} />}
+          />
+          <View
+            style={{
+              width: H_W.width * 0.15,
+              height: HEIGHT * 0.08,
+              borderRadius: (H_W.width / HEIGHT) * 70,
+              backgroundColor: colors.primary,
+              position: 'absolute',
+              bottom: HEIGHT * 0.04,
+              right: H_W.width * 0.05,
+              alignItems: 'center',
+              justifyContent: 'center',
+              shadowColor: colors.primary,
+              shadowOffset: {
+                width: 0,
+                height: 3,
+              },
+              shadowOpacity: 1,
+              shadowRadius: 4.65,
+            }}>
+            <View>
+              <Ionicons
+                name="ios-cart-outline"
+                color="white"
+                size={(H_W.width / HEIGHT) * 90}
+              />
+            </View>
+          </View>
+        </View>
+      </View>
+    </WrapperScreen>
+  );
 }
 
 export const PcVerticalTile = ({item, PcGoToSingleProduct, PcCart}) => {
@@ -53,68 +191,97 @@ export const PcVerticalTile = ({item, PcGoToSingleProduct, PcCart}) => {
   const HEIGHT = H_W.height - (insets.bottom + insets.top);
 
   return (
-    <TouchableOpacity
-      onPress={() => PcGoToSingleProduct(item)}
-      style={{width: H_W.width * 0.5, margin: 20}}>
+    <View style={{alignItems: 'center', marginTop: HEIGHT * 0.14}}>
       <View
         style={{
-          width: '100%',
-          borderRadius: H_W.width * 0.26,
-          height: H_W.width * 0.5,
-          backgroundColor: `rgba(${colors.rgb_Primary},1)`,
-          alignItems: 'center',
-          justifyContent: 'center',
-          shadowColor: colors.primary,
+          backgroundColor: 'white',
+          width: H_W.width * 0.55,
+          borderRadius: 20,
+          shadowColor: '#000',
           shadowOffset: {
             width: 0,
-            height: 4,
+            height: 3,
           },
-          shadowOpacity: 0.72,
-          shadowRadius: 5.46,
+          shadowOpacity: 0.29,
+          shadowRadius: 4.65,
         }}>
         <FastImage
           source={item.image}
           style={{
-            width: H_W.width * 0.5,
-            height: H_W.width * 0.5,
+            width: H_W.width * 0.45,
+            height: HEIGHT * 0.22,
+            marginLeft: -H_W.width * 0.05,
+            marginTop: -HEIGHT * 0.13,
             shadowColor: '#000',
             shadowOffset: {
               width: 0,
-              height: 4,
+              height: 3,
             },
-            shadowOpacity: 0.32,
-            shadowRadius: 5.46,
+            shadowOpacity: 0.29,
+            shadowRadius: 4.65,
           }}
           resizeMode="contain"
         />
-      </View>
-      <Text
-        numberOfLines={2}
-        style={{
-          width: '100%',
-          textAlign: 'center',
-          marginTop: HEIGHT * 0.015,
-          fontSize: 16,
-          fontWeight: 'bold',
-        }}>
-        {item.name}
-      </Text>
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          paddingHorizontal: H_W.width * 0.02,
-          marginTop: HEIGHT * 0.005,
-        }}>
-        <Text style={{fontSize: 16, fontWeight: 'bold', color: colors.primary}}>
-          ${item.price}
+        <Text
+          numberOfLines={2}
+          style={{
+            marginTop: HEIGHT * 0.015,
+            fontWeight: 'bold',
+            color: colors.primary,
+            fontSize: (H_W.width / HEIGHT) * 45,
+            paddingHorizontal: H_W.width * 0.02,
+          }}>
+          {item.name}
         </Text>
-        <Text style={{fontSize: 14, fontWeight: 'bold'}}>
-          <AntDesign name="star" color={colors.secondary} /> {item.rating}
+        <Text
+          numberOfLines={5}
+          style={{
+            paddingHorizontal: H_W.width * 0.02,
+            marginTop: HEIGHT * 0.01,
+            color: colors.darkGray,
+            fontSize: (H_W.width / HEIGHT) * 28,
+          }}>
+          {item.discription}
         </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingHorizontal: H_W.width * 0.02,
+            marginVertical: HEIGHT * 0.02,
+          }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <AntDesign
+              name="star"
+              color="#FDCA19"
+              size={(H_W.width / HEIGHT) * 30}
+            />
+            <Text
+              style={{
+                textAlign: 'right',
+                fontWeight: 'bold',
+                color: colors.primary,
+                fontSize: (H_W.width / HEIGHT) * 30,
+                marginLeft: H_W.width * 0.01,
+                fontFamily: 'Avenir-Black',
+              }}>
+              {item.rating}
+            </Text>
+          </View>
+          <Text
+            style={{
+              textAlign: 'right',
+              fontWeight: 'bold',
+              color: colors.primary,
+              fontSize: (H_W.width / HEIGHT) * 45,
+              fontFamily: 'Avenir-Black',
+            }}>
+            ${item.price}
+          </Text>
+        </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -262,45 +429,29 @@ export const TabList = ({item, PcchangeTab, PccurrentCat}) => {
   const HEIGHT = H_W.height - (insets.bottom + insets.top);
   return (
     <TouchableOpacity
+      onPress={() => PcchangeTab(item)}
       style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        marginHorizontal: H_W.width * 0.03,
-        paddingHorizontal: H_W.width * 0.03,
-        borderRadius: 20,
-        backgroundColor:
-          item.category === PccurrentCat.category
-            ? colors.primary
-            : colors.secondary,
-        borderWidth: 1,
-        borderColor: colors.lightGrey3,
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 3,
-        },
-        shadowOpacity: 0.29,
-        shadowRadius: 4.65,
-        height: HEIGHT * 0.2,
-      }}
-      onPress={() => PcchangeTab(item)}>
-      <FastImage
-        source={item.icon}
-        style={{width: H_W.width * 0.15, height: HEIGHT * 0.08}}
-        resizeMode="contain"
-      />
+        transform: [{rotate: '-90deg'}],
+        height: HEIGHT * 0.045,
+        width: '106%',
+        marginVertical: HEIGHT * 0.05,
+      }}>
       <Text
         style={{
+          color: 'white',
+          textAlign: 'center',
           fontWeight: 'bold',
-          color: item.category === PccurrentCat.category ? 'white' : 'black',
-          fontSize: item.category === PccurrentCat.category ? 22 : 16,
-          fontFamily: 'Zapfino',
+          fontSize: (H_W.width / HEIGHT) * 40,
         }}>
         {item.category}
       </Text>
     </TouchableOpacity>
   );
+};
+
+const border = {
+  borderColor: 'red',
+  borderWidth: 1,
 };
 
 const mapStateToProps = (state) => {

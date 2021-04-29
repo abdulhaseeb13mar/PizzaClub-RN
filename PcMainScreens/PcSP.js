@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import {colors} from '../PcFrequentUsage/PcColor';
 import NavigationRef from '../PcFrequentUsage/PcRefNavigation';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
 import {
   PcremoveFavAction,
   PcsetFavAction,
@@ -16,54 +16,21 @@ import {
   PcsetCurrentProductAction,
 } from '../PcStateManagement/PcActions';
 import Data from '../PcData';
-import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FastImage from 'react-native-fast-image';
 import PcHeader from '../PcFrequentUsage/PcHeader';
+import Ps from '../PcAllAssets/Images/Pasta5.png';
 import StarRating from '../starRating';
-import burgerYellow from '../PcAllAssets/Images/burgerYellow.png';
-import chickenyellow from '../PcAllAssets/Images/chickenyellow.png';
-import drinkyellow from '../PcAllAssets/Images/drinkyellow.png';
 
 function SingleProduct(props) {
   useEffect(() => {
-    getTheCategory();
-    getRandomPositions();
     checkIfFav();
   }, []);
   const PcProduct = props.PcProduct;
   const [fav, setFav] = useState(false);
-  const [productCategory, setProductCategory] = useState('');
-  const [randomPositions, setRandomPositions] = useState([]);
-  const [backLogo, setBackLogo] = useState(null);
   const insets = useSafeAreaInsets();
   const HEIGHT = H_W.height - (insets.bottom + insets.top);
-
-  const getTheCategory = () => {
-    for (let Pc = 0; Pc < Data.category.length; Pc++) {
-      if (Data.category[Pc].id === PcProduct.category) {
-        setProductCategory(Data.category[Pc].category);
-        Data.category[Pc].id === '1'
-          ? setBackLogo(chickenyellow)
-          : Data.category[Pc].id === '2'
-          ? setBackLogo(burgerYellow)
-          : setBackLogo(drinkyellow);
-        break;
-      }
-    }
-  };
-
-  function getRandomPositions() {
-    let positions = [];
-    let marginLeft = 0;
-    let rotation = 0;
-    for (let fv = 0; fv < 5; fv++) {
-      marginLeft = Math.random() * (0.9 - 0.04) + 0.04;
-      rotation = Math.random() * (360 - 10) + 10;
-      positions.push({marginLeft, rotation});
-    }
-    setRandomPositions(positions);
-  }
 
   const checkIfFav = () => {
     for (let Pc = 0; Pc < props.PcFavs.length; Pc++) {
@@ -82,12 +49,10 @@ function SingleProduct(props) {
   };
 
   const PcAddToCart = () => {
-    getRandomPositions();
     props.PcaddCartAction({...PcProduct});
   };
 
   const PcRemoveFromCart = () => {
-    getRandomPositions();
     props.PcCart[PcProduct.id] !== undefined &&
       props.PcremoveCartAction(PcProduct);
   };
@@ -96,224 +61,107 @@ function SingleProduct(props) {
   const PcGoBack = () => NavigationRef.GoBack();
 
   return (
-    <WrapperScreen style={{backgroundColor: 'white'}}>
+    <WrapperScreen
+      statusBar={colors.primary}
+      style={{backgroundColor: 'white'}}
+      barStyle="light-content">
       <View
         style={{
-          position: 'absolute',
+          width: H_W.width * 1.5,
+          height: HEIGHT * 0.35,
+          marginLeft: -H_W.width * 0.2,
+          marginTop: -HEIGHT * 0.08,
+          backgroundColor: colors.primary,
           zIndex: -1,
-          flex: 1,
-        }}>
-        {randomPositions.length > 0 &&
-          randomPositions.map((pos, index) => (
-            <FastImage
-              key={index}
-              source={backLogo}
-              style={{
-                width: H_W.width * 0.2,
-                height: HEIGHT * 0.1,
-                opacity: 0.5,
-                marginLeft: H_W.width * pos.marginLeft,
-                transform: [{rotate: `${pos.rotation}deg`}],
-                marginTop: index !== 0 ? HEIGHT * 0.1 : 0,
-              }}
-              resizeMode="contain"
-            />
-          ))}
-      </View>
-
+          position: 'absolute',
+          transform: [{rotate: '13deg'}],
+        }}
+      />
       <ScrollView bounces={false}>
-        <PcHeader
-          leftIcon={Feather}
-          leftIconName="corner-up-left"
-          leftIconAction={PcGoBack}
+        <Entypo
+          name="cross"
+          color="white"
+          size={(H_W.width / HEIGHT) * 60}
+          style={{marginTop: HEIGHT * 0.01, marginLeft: H_W.width * 0.02}}
         />
-        <View style={{alignItems: 'center'}}>
-          <FastImage
-            source={PcProduct.image}
-            style={{
-              width: H_W.width * 0.8,
-              height: HEIGHT * 0.35,
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 4,
-              },
-              shadowOpacity: 0.3,
-              shadowRadius: 4.65,
-            }}
-            resizeMode="contain"
-          />
-        </View>
-        <Text
-          style={{
-            fontWeight: 'bold',
-            fontSize: 23,
-            marginLeft: H_W.width * 0.04,
-            width: H_W.width * 0.8,
-            marginTop: HEIGHT * 0.02,
-          }}>
-          {PcProduct.name}
-        </Text>
-        <Text
-          style={{
-            fontWeight: 'bold',
-            fontSize: 17,
-            color: colors.lightGrey3,
-            marginLeft: H_W.width * 0.04,
-            width: H_W.width * 0.8,
-            marginTop: HEIGHT * 0.01,
-          }}>
-          {productCategory}
-        </Text>
         <View
           style={{
             flexDirection: 'row',
-            alignItems: 'center',
-            marginLeft: H_W.width * 0.04,
-            marginTop: HEIGHT * 0.01,
-          }}>
-          <StarRating rating={PcProduct.rating} size={H_W.width * 0.22} />
-          <Text
-            style={{
-              marginLeft: H_W.width * 0.05,
-              fontWeight: 'bold',
-              fontSize: 16,
-            }}>
-            {PcProduct.rating}
-          </Text>
-        </View>
-        <Text
-          style={{
-            marginLeft: H_W.width * 0.04,
-            marginTop: HEIGHT * 0.02,
-            fontSize: 15.5,
-            width: H_W.width * 0.9,
-          }}>
-          {PcProduct.description}
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            alignItems: 'flex-end',
             justifyContent: 'space-between',
-            paddingHorizontal: H_W.width * 0.04,
-            marginTop: HEIGHT * 0.02,
+            paddingLeft: H_W.width * 0.03,
           }}>
           <TouchableOpacity
-            onPress={toggleFav}
             style={{
-              paddingHorizontal: H_W.width * 0.027,
+              backgroundColor: 'white',
+              paddingHorizontal: H_W.width * 0.02,
+              paddingVertical: HEIGHT * 0.008,
               borderRadius: 15,
-              paddingVertical: HEIGHT * 0.015,
-              backgroundColor: colors.secondary,
               shadowColor: '#000',
               shadowOffset: {
                 width: 0,
                 height: 2,
               },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
+              shadowOpacity: 0.23,
+              shadowRadius: 2.62,
             }}>
-            <FontAwesome
-              name={fav ? 'heart' : 'heart-o'}
-              color={colors.primary}
-              size={27}
-            />
+            <Ionicons name="heart-outline" color={colors.primary} size={35} />
           </TouchableOpacity>
-          <View
+          <FastImage
+            source={Ps}
+            resizeMode="contain"
             style={{
-              width: H_W.width * 0.45,
-              height: HEIGHT * 0.063,
-              borderRadius: 10,
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-              flexDirection: 'row',
-            }}>
-            <TouchableOpacity
-              onPress={PcRemoveFromCart}
-              style={{
-                backgroundColor: colors.secondary,
-                paddingHorizontal: H_W.width * 0.015,
-                paddingVertical: HEIGHT * 0.007,
-                borderRadius: 8,
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 3,
-                },
-                shadowOpacity: 0.27,
-                shadowRadius: 4.65,
-              }}>
-              <AntDesign name="minus" size={22} color={colors.primary} />
-            </TouchableOpacity>
-            <Text style={{fontWeight: 'bold', fontSize: 24, color: 'black'}}>
-              {props.PcCart[PcProduct.id] !== undefined
-                ? props.PcCart[PcProduct.id].added
-                : 0}
-            </Text>
-            <TouchableOpacity
-              onPress={PcAddToCart}
-              style={{
-                backgroundColor: colors.secondary,
-                paddingHorizontal: H_W.width * 0.015,
-                paddingVertical: HEIGHT * 0.007,
-                borderRadius: 8,
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 3,
-                },
-                shadowOpacity: 0.27,
-                shadowRadius: 4.65,
-              }}>
-              <AntDesign name="plus" size={22} color={colors.primary} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View
-          style={{
-            alignItems: 'center',
-            marginTop: HEIGHT * 0.03,
-            marginBottom: HEIGHT * 0.02,
-            overflow: 'visible',
-          }}>
-          <TouchableOpacity
-            onPress={PcAddToCart}
-            style={{
-              width: H_W.width * 0.28,
-              height: H_W.width * 0.28,
-              backgroundColor: colors.secondary,
-              alignItems: 'center',
-              justifyContent: 'center',
-              paddingHorizontal: H_W.width * 0.02,
-              paddingVertical: HEIGHT * 0.01,
-              borderRadius: H_W.width * 0.16,
+              width: H_W.width * 0.8,
+              height: HEIGHT * 0.42,
+              marginRight: -H_W.width * 0.08,
               shadowColor: '#000',
               shadowOffset: {
                 width: 0,
-                height: 6,
+                height: 5,
               },
-              shadowOpacity: 0.37,
-              shadowRadius: 7.49,
-            }}>
-            <Text
-              style={{
-                fontWeight: 'bold',
-                color: colors.primary,
-                textAlign: 'center',
-                fontSize: 23,
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowOpacity: 0.23,
-                shadowRadius: 2.62,
-              }}>
-              Add to Cart!
-            </Text>
-          </TouchableOpacity>
+              shadowOpacity: 0.34,
+              shadowRadius: 10.27,
+              overflow: 'visible',
+            }}
+          />
         </View>
+        <Text
+          style={{
+            color: colors.primary,
+            fontWeight: 'bold',
+            fontSize: (H_W.width / HEIGHT) * 65,
+            paddingHorizontal: H_W.width * 0.03,
+            marginTop: HEIGHT * 0.01,
+          }}>
+          Super Supreme
+        </Text>
+        <View
+          style={{
+            marginLeft: H_W.width * 0.03,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <StarRating rating={3.5} size={(H_W.width / HEIGHT) * 180} />
+          <Text
+            style={{
+              fontWeight: 'bold',
+              color: colors.primary,
+              marginLeft: H_W.width * 0.04,
+              fontSize: (H_W.width / HEIGHT) * 35,
+            }}>
+            3.5
+          </Text>
+        </View>
+        <Text
+          style={{
+            paddingHorizontal: H_W.width * 0.03,
+            marginTop: HEIGHT * 0.025,
+            color: colors.darkGray,
+            fontSize: (H_W.width / HEIGHT) * 32,
+          }}>
+          Beef with Pepperoni, Sausage, Smoked Chicken, Onion, Green Pepper,
+          Mushrooms & Black Olives
+        </Text>
       </ScrollView>
     </WrapperScreen>
   );
@@ -326,6 +174,11 @@ const mapStateToProps = (state) => {
     totalItems: state.PcCartReducer.totalItems,
     PcCart: state.PcCartReducer.items,
   };
+};
+
+const border = {
+  borderColor: 'red',
+  borderWidth: 1,
 };
 
 export default connect(mapStateToProps, {
