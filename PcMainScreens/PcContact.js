@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {Text, View, StyleSheet, TextInput} from 'react-native';
 import {connect} from 'react-redux';
 import WrapperScreen from '../PcFrequentUsage/PcWrapperScreen';
@@ -7,7 +7,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {H_W} from '../PcFrequentUsage/PcResponsive';
 import {colors} from '../PcFrequentUsage/PcColor';
 import {Button, Overlay} from 'react-native-elements';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {isFormValid} from '../PcFrequentUsage/Pcvalidation';
 import NavPointer from '../PcFrequentUsage/PcRefNavigation';
 import {
@@ -17,18 +17,11 @@ import {
 } from '../PcStateManagement/PcActions';
 import UseHeader from '../PcFrequentUsage/PcHeader';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import Feather from 'react-native-vector-icons/Feather';
-import Loop from '../PcFrequentUsage/PcFlatList';
-import ItemCounterWrapper from '../PcFrequentUsage/PcItemCounterWrapper';
-import {PcVerticalTile} from './PcHome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ConfirmOrder = (props) => {
-  useEffect(() => {
-    convertObjectToArray();
-  }, [props.PcCart]);
   const insets = useSafeAreaInsets();
   const HEIGHT = H_W.height - (insets.bottom + insets.top);
-  const [HorizontalCartArray, setHorizontalCartArray] = useState([]);
   const [firstNameErrMsg, setFirstNameErrMsg] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -40,15 +33,6 @@ const ConfirmOrder = (props) => {
   const [addressErrMsg, setAddressErrMsg] = useState('');
   const [phone, setPhone] = useState('');
 
-  const convertObjectToArray = () => {
-    const CartArray = Object.keys(props.PcCart);
-    let UsArr = [];
-    CartArray.forEach((element) => {
-      UsArr.push(props.PcCart[element]);
-    });
-    setHorizontalCartArray(UsArr);
-  };
-
   const PcConfirm = () => {
     const formValidResponse = isFormValid(firstName, email, phone, address);
     if (!formValidResponse.status) {
@@ -57,7 +41,7 @@ const ConfirmOrder = (props) => {
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
-        MoveToConfirmOrder();
+        setShowModal(true);
       }, 2000);
       props.PcUserAction({
         email: email,
@@ -119,20 +103,20 @@ const ConfirmOrder = (props) => {
     }
   };
 
-  const MoveToConfirmOrder = () => {
-    props.PcresetCart();
-    NavPointer.Push('PcConfirmOrder');
-  };
+  // const MoveToConfirmOrder = () => {
+  //   props.PcresetCart();
+  //   NavPointer.Push('PcConfirmOrder');
+  // };
 
   const closeModal = () => {
     setShowModal(false);
     props.PcresetCart();
     NavPointer.NavigateAndReset('PcHome');
   };
-  const PcGoToSingleProduct = (item) => {
-    props.PcsetCurrentProductAction(item);
-    NavPointer.Navigate('PcSP');
-  };
+  // const PcGoToSingleProduct = (item) => {
+  //   props.PcsetCurrentProductAction(item);
+  //   NavPointer.Navigate('PcSP');
+  // };
 
   const changePhone = (t) => setPhone(t);
   const changeAddress = (t) => setAddress(t);
@@ -141,31 +125,29 @@ const ConfirmOrder = (props) => {
   const changeFirstName = (t) => setFirstName(t);
 
   return (
-    <WrapperScreen style={{backgroundColor: 'white'}}>
+    <WrapperScreen
+      statusColor={colors.primary}
+      barStyle="light-content"
+      style={{backgroundColor: `rgba(${colors.rgb_Primary}, 0.15)`}}>
+      <View
+        style={{
+          width: H_W.width * 1.5,
+          height: HEIGHT * 0.35,
+          marginLeft: -H_W.width * 0.2,
+          marginTop: -HEIGHT * 0.08,
+          backgroundColor: colors.primary,
+          zIndex: -1,
+          position: 'absolute',
+          transform: [{rotate: '13deg'}],
+        }}
+      />
       <KeyboardAwareScrollView style={styles.container} bounces={false}>
         <UseHeader
-          leftIcon={Feather}
-          leftIconName="corner-up-left"
-          leftIconColor={colors.primary}
+          leftIcon={Ionicons}
+          leftIconName="arrow-back"
+          leftIconColor="white"
           leftIconAction={PcGoBack}
           Title={<Text style={styles.PcContact2}>Checkout</Text>}
-        />
-        <Loop
-          data={HorizontalCartArray}
-          renderItem={({item}) => (
-            <ItemCounterWrapper
-              style={{marginVertical: HEIGHT * 0.025}}
-              counterColor={colors.secondary}
-              counterContentColor={colors.primary}
-              item={item}
-              position="top"
-              Counterlength={H_W.width * 0.2}>
-              <PcVerticalTile
-                item={item}
-                PcGoToSingleProduct={PcGoToSingleProduct}
-              />
-            </ItemCounterWrapper>
-          )}
         />
         <View
           style={{
@@ -179,10 +161,10 @@ const ConfirmOrder = (props) => {
               alignItems: 'center',
               justifyContent: 'space-between',
             }}>
-            <Text style={{fontSize: 17, fontWeight: 'bold', color: 'black'}}>
+            <Text style={{fontSize: 17, fontWeight: 'bold', color: 'white'}}>
               Total Price
             </Text>
-            <Text style={{fontSize: 17, fontWeight: 'bold', color: 'black'}}>
+            <Text style={{fontSize: 17, fontWeight: 'bold', color: 'white'}}>
               $ {props.total}
             </Text>
           </View>
@@ -193,10 +175,11 @@ const ConfirmOrder = (props) => {
               justifyContent: 'space-between',
               marginTop: HEIGHT * 0.01,
               paddingBottom: HEIGHT * 0.03,
-              borderBottomWidth: 1,
+              borderBottomWidth: 3,
+              borderBottomColor: 'white',
             }}>
-            <Text style={{color: 'black'}}>Payment Method</Text>
-            <Text style={{color: 'black'}}>Cash on Delivery</Text>
+            <Text style={{color: 'white'}}>Payment Method</Text>
+            <Text style={{color: 'white'}}>Cash on Delivery</Text>
           </View>
         </View>
         <View style={styles.PcPersonalInfoWrapper}>
@@ -209,6 +192,7 @@ const ConfirmOrder = (props) => {
               NAME <Text> {firstNameErrMsg}</Text>
             </Text>
             <View style={styles.PcPersonalInfoInputWrapper}>
+              <Ionicons name="person" size={20} color={colors.primary} />
               <TextInput
                 placeholder="Your Name"
                 style={{...styles.Input, height: HEIGHT * 0.065}}
@@ -226,6 +210,7 @@ const ConfirmOrder = (props) => {
               EMAIL<Text> {emailErrMsg}</Text>
             </Text>
             <View style={styles.PcPersonalInfoInputWrapper}>
+              <Ionicons name="mail" size={20} color={colors.primary} />
               <TextInput
                 placeholder="Email"
                 style={{...styles.Input, height: HEIGHT * 0.065}}
@@ -243,6 +228,11 @@ const ConfirmOrder = (props) => {
               CONTACT NUMBER<Text> {phoneErrMsg}</Text>
             </Text>
             <View style={styles.PcPersonalInfoInputWrapper}>
+              <Ionicons
+                name="md-phone-portrait-sharp"
+                size={20}
+                color={colors.primary}
+              />
               <TextInput
                 placeholder="Contact Number"
                 keyboardType="number-pad"
@@ -261,11 +251,15 @@ const ConfirmOrder = (props) => {
               DELIVERY ADDRESS<Text> {addressErrMsg}</Text>
             </Text>
             <View style={styles.PcPersonalInfoInputWrapper}>
+              <Ionicons
+                name="location-sharp"
+                size={20}
+                color={colors.primary}
+              />
               <TextInput
                 placeholder="Address"
-                style={{...styles.Input, height: HEIGHT * 0.13}}
+                style={{...styles.Input, height: HEIGHT * 0.065}}
                 onChangeText={changeAddress}
-                multiline
                 placeholderTextColor={colors.darkGray}
               />
             </View>
@@ -280,8 +274,8 @@ const ConfirmOrder = (props) => {
               ...styles.PcModalWrapper,
               paddingVertical: HEIGHT * 0.04,
             }}>
-            <MaterialCommunityIcons
-              name="bottle-tonic-outline"
+            <FontAwesome5
+              name="hamburger"
               size={H_W.width * 0.25}
               color="white"
             />
@@ -338,7 +332,7 @@ export default connect(mapStateToProps, {
 
 const styles = StyleSheet.create({
   PcContact2: {
-    color: colors.primary,
+    color: 'white',
     fontSize: 22,
   },
   PcModalHeadText: {
@@ -353,7 +347,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: H_W.width * 0.8,
     backgroundColor: colors.primary,
-    borderRadius: 10,
+    borderRadius: 50,
   },
   Input: {
     width: H_W.width * 0.81,
@@ -376,7 +370,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: colors.primary,
     borderWidth: 1.5,
-    backgroundColor: colors.secondary,
+    backgroundColor: 'white',
   },
   PcPersonalInfoHeadingName: {
     fontSize: 13,

@@ -18,10 +18,7 @@ import {
 } from '../PcStateManagement/PcActions';
 import Data from '../PcData';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import FastImage from 'react-native-fast-image';
-import PcHeader from '../PcFrequentUsage/PcHeader';
-import Ps from '../PcAllAssets/Images/Pasta5.png';
 import StarRating from '../starRating';
 
 function SingleProduct(props) {
@@ -92,7 +89,7 @@ function SingleProduct(props) {
     setCurrToppings(copy);
   };
 
-  const PcGotoCart = () => NavigationRef.Navigate('PcContact');
+  // const PcGotoCart = () => NavigationRef.Navigate('PcContact');
   const PcGoBack = () => NavigationRef.GoBack();
 
   return (
@@ -417,11 +414,6 @@ const mapStateToProps = (state) => {
     totalItems: state.PcCartReducer.totalItems,
     PcCart: state.PcCartReducer.items,
   };
-};
-
-const border = {
-  borderColor: 'red',
-  borderWidth: 1,
 };
 
 export default connect(mapStateToProps, {

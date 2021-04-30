@@ -22,7 +22,7 @@ const PcCartReducer = (st = cart, action) => {
       prev_items[ITEM_ID].added = added1;
       let tot_items = st.totalItems + 1;
       let tot_amount = (
-        parseFloat(st.totalAmount) + parseFloat(action.payload.Price)
+        parseFloat(st.totalAmount) + parseFloat(action.payload.price)
       ).toFixed(2);
       st = Object.assign({}, st, {
         items: prev_items,
@@ -41,7 +41,7 @@ const PcCartReducer = (st = cart, action) => {
       }
       tot_items = st.totalItems - 1;
       tot_amount = (
-        parseFloat(st.totalAmount) - parseFloat(action.payload.Price)
+        parseFloat(st.totalAmount) - parseFloat(action.payload.price)
       ).toFixed(2);
       st = Object.assign({}, st, {
         items: prev_items,

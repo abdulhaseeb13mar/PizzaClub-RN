@@ -30,7 +30,7 @@ function Search(props) {
       item.name.toLowerCase().includes(searchText.toLowerCase()),
     );
     return SearchedItems.length === 0 ? (
-      <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
+      <Text style={{fontWeight: 'bold', textAlign: 'center', color: 'white'}}>
         Nothing Found...
       </Text>
     ) : (
@@ -65,12 +65,25 @@ function Search(props) {
   const PcchangeSearchText = (t) => setSearchText(t);
   return (
     <WrapperScreen
-      statusColor={`rgba(${colors.rgb_Primary}, 0.15)`}
+      statusColor={colors.primary}
+      barStyle="light-content"
       style={{backgroundColor: `rgba(${colors.rgb_Primary}, 0.15)`}}>
+      <View
+        style={{
+          width: H_W.width * 1.5,
+          height: HEIGHT * 0.35,
+          marginLeft: -H_W.width * 0.2,
+          marginTop: -HEIGHT * 0.08,
+          backgroundColor: colors.primary,
+          zIndex: -1,
+          position: 'absolute',
+          transform: [{rotate: '13deg'}],
+        }}
+      />
       <PcHeader
         leftIcon={Ionicons}
         leftIconName="arrow-back"
-        leftIconColor={colors.primary}
+        leftIconColor="white"
         leftIconAction={PcGoBack}
         Title={<Text style={styles.PcSearch2}>Search</Text>}
       />
@@ -134,7 +147,7 @@ const styles = StyleSheet.create({
   PcSearch2: {
     fontWeight: 'bold',
     fontSize: 20,
-    color: 'black',
+    color: 'white',
   },
   PcSearch3: {
     alignItems: 'center',

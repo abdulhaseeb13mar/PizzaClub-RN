@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {Text, View, TouchableOpacity, ScrollView} from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
 import WrapperScreen from '../PcFrequentUsage/PcWrapperScreen';
 import {colors} from '../PcFrequentUsage/PcColor';
 import {H_W} from '../PcFrequentUsage/PcResponsive';
@@ -40,7 +40,7 @@ function PcHome(props) {
     );
     setPcTabProducts(filteredProducts);
   };
-  const PcGotoCart = () => RefNavigation.Navigate('PcContact');
+  const PcGotoCart = () => RefNavigation.Navigate('PcCart');
   const PcGotoSearch = () => RefNavigation.Navigate('PcSearch');
   const PcGotoFav = () => RefNavigation.Navigate('PcFav');
   const PcGoToSingleProduct = (item) => {
@@ -51,6 +51,7 @@ function PcHome(props) {
   return (
     <WrapperScreen
       statusColor={colors.primary}
+      barStyle="light-content"
       style={{backgroundColor: `rgba(${colors.rgb_Primary}, 0.15)`}}>
       <View
         style={{
@@ -163,7 +164,8 @@ function PcHome(props) {
               />
             )}
           />
-          <View
+          <TouchableOpacity
+            onPress={PcGotoCart}
             style={{
               width: H_W.width * 0.15,
               height: HEIGHT * 0.08,
@@ -198,7 +200,7 @@ function PcHome(props) {
                 />
               )}
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </WrapperScreen>
@@ -253,16 +255,31 @@ export const PcVerticalTile = ({item, PcGoToSingleProduct, PcCart}) => {
           }}>
           {item.name}
         </Text>
-        <Text
-          numberOfLines={5}
-          style={{
-            paddingHorizontal: H_W.width * 0.02,
-            marginTop: HEIGHT * 0.01,
-            color: colors.darkGray,
-            fontSize: (H_W.width / HEIGHT) * 28,
-          }}>
-          {item.discription}
-        </Text>
+        {!PcCart && (
+          <Text
+            numberOfLines={5}
+            style={{
+              paddingHorizontal: H_W.width * 0.02,
+              marginTop: HEIGHT * 0.01,
+              color: colors.darkGray,
+              fontSize: (H_W.width / HEIGHT) * 28,
+            }}>
+            {item.discription}
+          </Text>
+        )}
+        {PcCart && item.size !== 'NoSize' && (
+          <Text
+            numberOfLines={5}
+            style={{
+              paddingHorizontal: H_W.width * 0.02,
+              marginTop: HEIGHT * 0.01,
+              color: colors.darkGray,
+              fontSize: (H_W.width / HEIGHT) * 28,
+              fontWeight: 'bold',
+            }}>
+            {item.size}
+          </Text>
+        )}
         <View
           style={{
             flexDirection: 'row',
@@ -479,11 +496,6 @@ export const TabList = ({item, PcchangeTab, PccurrentCat}) => {
       </Text>
     </TouchableOpacity>
   );
-};
-
-const border = {
-  borderColor: 'red',
-  borderWidth: 1,
 };
 
 const mapStateToProps = (state) => {

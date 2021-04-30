@@ -15,10 +15,9 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {colors} from '../PcFrequentUsage/PcColor';
 import {H_W} from '../PcFrequentUsage/PcResponsive';
 import RefNavigation from '../PcFrequentUsage/PcRefNavigation';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Button} from 'react-native-elements';
 import Loop from '../PcFrequentUsage/PcFlatList';
-import LinearGradient from 'react-native-linear-gradient';
 import PcHeader from '../PcFrequentUsage/PcHeader';
 import {PcVerticalTile} from './PcHome';
 import ItemCounterWrapper from '../PcFrequentUsage/PcItemCounterWrapper';
@@ -53,92 +52,29 @@ export const Cart = (props) => {
 
   return (
     <WrapperScreen
-      statusColor={`rgba(${colors.rgb_Primary},0.2)`}
-      style={{
-        backgroundColor: `rgba(${colors.rgb_Primary},0.2)`,
-      }}>
+      statusColor={colors.primary}
+      barStyle="light-content"
+      style={{backgroundColor: `rgba(${colors.rgb_Primary}, 0.15)`}}>
       <View
         style={{
-          shadowColor: '#000',
-          shadowOffset: {
-            width: -H_W.width * 0.06,
-            height: HEIGHT * 0.02,
-          },
-          shadowOpacity: 1,
-          shadowRadius: 14.78,
-          position: 'absolute',
-          bottom: -HEIGHT * 0.1,
-          left: -H_W.width * 0.4,
+          width: H_W.width * 1.5,
+          height: HEIGHT * 0.35,
+          marginLeft: -H_W.width * 0.2,
+          marginTop: -HEIGHT * 0.08,
+          backgroundColor: colors.primary,
           zIndex: -1,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <LinearGradient
-          style={{
-            width: H_W.width * 1.2,
-            height: H_W.width * 1.2,
-            borderRadius: H_W.width * 0.6,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          colors={[
-            `rgba(${colors.rgb_Primary},0.0)`,
-            `rgba(${colors.rgb_Primary},0.1)`,
-          ]}
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 1}}>
-          <View
-            style={{
-              shadowColor: '#000',
-              shadowOffset: {
-                width: -H_W.width * 0.06,
-                height: HEIGHT * 0.02,
-              },
-              shadowOpacity: 0.1,
-              shadowRadius: 14.78,
-            }}>
-            <LinearGradient
-              style={{
-                zIndex: -1,
-                width: H_W.width * 1.05,
-                height: H_W.width * 1.05,
-                borderRadius: H_W.width * 0.6,
-                marginTop: H_W.width * 0.15,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-              colors={[
-                `rgba(${colors.rgb_Primary},0.0)`,
-                `rgba(${colors.rgb_Primary},0.5)`,
-              ]}>
-              <LinearGradient
-                style={{
-                  zIndex: -1,
-                  width: H_W.width * 0.9,
-                  height: H_W.width * 0.9,
-                  borderRadius: H_W.width * 0.6,
-                  marginTop: H_W.width * 0.15,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                colors={[
-                  `rgba(${colors.rgb_Primary},0.0)`,
-                  `rgba(${colors.rgb_Primary},0.5)`,
-                ]}
-              />
-            </LinearGradient>
-          </View>
-        </LinearGradient>
-      </View>
+          position: 'absolute',
+          transform: [{rotate: '13deg'}],
+        }}
+      />
       <PcHeader
-        leftIcon={FontAwesome}
-        leftIconName="chevron-left"
-        leftIconColor={colors.primary}
+        leftIcon={Ionicons}
+        leftIconName="arrow-back"
+        leftIconColor="white"
         leftIconAction={PcGoBack}
-        Title={<Text style={{fontSize: 22}}>Cart</Text>}
+        Title={<Text style={{fontSize: 22, color: 'white'}}>Cart</Text>}
       />
       <Loop
-        numColumns={2}
         horizontal={false}
         data={HorizontalCartArray}
         renderItem={({item}) => (
@@ -153,18 +89,24 @@ export const Cart = (props) => {
               item={item}
               PcGoToSingleProduct={PcGoToSingleProduct}
               PcCart={props.PcCart}
+              isCart={true}
             />
           </ItemCounterWrapper>
         )}
       />
-      <View>
+      <View
+        style={{
+          backgroundColor: colors.primary,
+          marginBottom: -insets.bottom,
+          paddingBottom: insets.bottom,
+        }}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
             paddingHorizontal: H_W.width * 0.05,
-            paddingVertical: HEIGHT * 0.007,
+            paddingVertical: HEIGHT * 0.01,
             marginBottom: HEIGHT * 0.015,
             borderTopWidth: 1,
           }}>
@@ -200,8 +142,9 @@ export const Cart = (props) => {
             onPress={PcinfoScreen}
             disabled={props.PcTotalItems === 0}
             title="Checkout"
+            titleStyle={{color: colors.primary, fontWeight: 'bold'}}
             buttonStyle={{
-              backgroundColor: colors.primary,
+              backgroundColor: 'white',
               paddingVertical: HEIGHT * 0.015,
               borderRadius: 10,
             }}
